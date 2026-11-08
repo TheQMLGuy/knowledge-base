@@ -1,0 +1,39 @@
+/*
+  PLACEHOLDER design tokens.
+  Replace this whole file with the tokens from the option you pick
+  out of the Claude Design exploration (see DESIGN_PROMPT.md).
+  Everything else in the site reads only these variables.
+*/
+:root {
+  --bg: #f4f2ee;
+  --surface: #ffffff;
+  --ink: #1a1a1a;
+  --ink-muted: #5c5c5c;
+  --accent: #1a1a1a;
+  --accent-2: #8a8a8a;
+  --portal: #1a1a1a;
+  --link: #1a1a1a;
+  --code-bg: #ebe8e2;
+
+  --font-display: Georgia, serif;
+  --font-body: Georgia, serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+
+  --measure: 68ch;
+  --ease-portal: cubic-bezier(0.7, 0, 0.2, 1);
+  --dur-portal: 900ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --surface: #1c1c1c;
+    --ink: #ececec;
+    --ink-muted: #a0a0a0;
+    --accent: #ececec;
+    --accent-2: #6a6a6a;
+    --portal: #ececec;
+    --link: #ececec;
+    --code-bg: #222222;
+  }
+}

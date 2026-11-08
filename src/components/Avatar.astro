@@ -1,0 +1,56 @@
+---
+import { actions } from './actions';
+---
+<section class="stage">
+  <!-- Placeholder avatar: a single eye that watches the cursor.
+       Replace with the avatar from the design option you choose. -->
+  <svg class="avatar" viewBox="0 0 200 200" role="img" aria-label="Avatar">
+    <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle class="pupil" cx="100" cy="100" r="18" fill="currentColor" />
+  </svg>
+
+  <p class="speech" aria-live="polite">Hello. Pick something.</p>
+
+  <nav class="actions" aria-label="What the avatar can do">
+    {actions.map((a) => (
+      <a href={a.href} data-portal={a.href} data-line={a.line}>{a.label}</a>
+    ))}
+  </nav>
+</section>
+
+<style>
+  .stage { min-height: 100dvh; display: grid; place-content: center; justify-items: center; gap: 1.5rem; padding: 1rem; text-align: center; }
+  .avatar { width: min(240px, 60vw); color: var(--accent); }
+  .pupil { transition: transform 120ms ease-out; }
+  .speech { font-family: var(--font-display); font-size: 1.25rem; min-height: 1.6em; margin: 0; }
+  .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+  .actions a { padding: 0.6rem 1rem; border: 1px solid var(--ink); text-decoration: none; color: var(--ink); font-family: var(--font-mono); }
+  .actions a:hover, .actions a:focus-visible { background: var(--ink); color: var(--bg); }
+</style>
+
+<script>
+  function wireAvatar() {
+    const pupil = document.querySelector<SVGCircleElement>('.pupil');
+    const svg = document.querySelector<SVGSVGElement>('.avatar');
+    const speech = document.querySelector<HTMLElement>('.speech');
+    if (!pupil || !svg || !speech) return;
+    const idle = speech.textContent;
+
+    window.addEventListener('pointermove', (e) => {
+      const r = svg.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const reach = Math.min(40, d / 8); // keeps the pupil inside the eye
+      pupil.style.transform = `translate(${(dx / d) * reach}px, ${(dy / d) * reach}px)`;
+    });
+
+    document.querySelectorAll<HTMLElement>('.actions a').forEach((a) => {
+      const say = () => (speech.textContent = a.dataset.line ?? '');
+      a.addEventListener('pointerenter', say);
+      a.addEventListener('focus', say);
+      a.addEventListener('pointerleave', () => (speech.textContent = idle));
+    });
+  }
+  document.addEventListener('astro:page-load', wireAvatar);
+</script>
